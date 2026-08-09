@@ -7,6 +7,8 @@
   <main class="main">
 @include('components.carouselHero')
    @include('components.Featured')
+   @include('components.products')
+
 
 @include('components.features')
 @include('components.call')

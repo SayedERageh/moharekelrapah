@@ -2,96 +2,60 @@
 
 namespace App\Filament\Resources\ProductCategories;
 
-use App\Filament\Resources\ProductCategories\Pages\ManageProductCategories;
+use App\Filament\Resources\ProductCategories\Pages\CreateProductCategory;
+use App\Filament\Resources\ProductCategories\Pages\EditProductCategory;
+use App\Filament\Resources\ProductCategories\Pages\ListProductCategories;
+use App\Filament\Resources\ProductCategories\Schemas\ProductCategoryForm;
+use App\Filament\Resources\ProductCategories\Tables\ProductCategoriesTable;
 use App\Models\ProductCategory;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\ImageColumn;
 use UnitEnum;
 
 class ProductCategoryResource extends Resource
 {
     protected static ?string $model = ProductCategory::class;
-    protected static ?string $navigationLabel = 'اقسام المنتجات';
+
+
+protected static ?string $navigationLabel = 'أقسام المنتجات';
 
 protected static string|UnitEnum|null $navigationGroup = 'المنتجات';
-    protected static ?string $modelLabel = 'كاتجوري';
 
-    protected static ?string $pluralModelLabel = 'التصنيفات';
-protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedShoppingBag;
+protected static ?string $modelLabel = 'قسم';
+
+protected static ?string $pluralModelLabel = 'أقسام المنتجات';
+
+protected static string|BackedEnum|null $navigationIcon =
+Heroicon::OutlinedRectangleStack;
+
+protected static ?int $navigationSort = 2;
+
     public static function form(Schema $schema): Schema
     {
-        return $schema
-            ->components([
-                                  // اسم الكاتجوري
-                TextInput::make('name')
-                    ->label('اسم الكاتجوري')
-                    ->required()
-                    ,
-      TextInput::make('description')
-                    ->label(' الوصــــف')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                  ,
-                        FileUpload::make('image')
-                ->label('صورة القسم')
-                ->image()
-                    ->disk('public')
-
-                ->directory('categories')
-                ->nullable(),
-       
-
-            ]);
+        return ProductCategoryForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-          // Slug
-          
-          TextColumn::make('name')
-                    ->label('الاســـــم ')
-                    ,    
-                      TextColumn::make('description')
-                    ->label('وصف القسم')
-                    
-                    ->wrap(),
-                        ImageColumn::make('image')
-    ->label('الصورة')
-    ->disk('public')
-    ->circular(),
+        return ProductCategoriesTable::configure($table);
+    }
 
-            ])
-            ->filters([
-                //
-            ])
-            ->recordActions([
-                EditAction::make(),
-                DeleteAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
-            ]);
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => ManageProductCategories::route('/'),
+            'index' => ListProductCategories::route('/'),
+            'create' => CreateProductCategory::route('/create'),
+            'edit' => EditProductCategory::route('/{record}/edit'),
         ];
     }
 }

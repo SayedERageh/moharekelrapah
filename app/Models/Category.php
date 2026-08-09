@@ -4,16 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Category extends Model
+class Contact extends Model
 {
-    protected $fillable = [
-        'name',
-        'slug',
-    ];
-
-    // علاقة: كاتجوري فيها بوستات
-    public function posts()
-    {
-        return $this->hasMany(Post::class);
-    }
+    
+protected $fillable = [
+    'name',
+    'slug',
+   
+];
 }

@@ -1,288 +1,77 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm" dir="rtl">
-    <div class="container">
 
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold text-primary fs-3" href="{{ route('home') }}">
-            <i class="bi bi-lightning-charge-fill ms-2"></i>
-            متولي الكتريك
-        </a>
-
-        <!-- Mobile -->
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Menu -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-
-            <ul class="navbar-nav mx-auto align-items-lg-center gap-lg-2">
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}"
-                       href="{{ route('home') }}">
-                        الرئيسية
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}"
-                       href="{{ route('about') }}">
-                        من نحن
-                    </a>
-                </li>
-
-                <li class="nav-item dropdown">
-
-                    <a class="nav-link dropdown-toggle {{ request()->routeIs('services.*') ? 'active' : '' }}"
-                       href="#"
-                       data-bs-toggle="dropdown">
-
-                        الخدمات
-
-                    </a>
-
-                    <ul class="dropdown-menu text-end">
-
-                        @foreach($services ?? [] as $service)
-
-                            <li>
-
-                                <a class="dropdown-item"
-                                   href="{{ route('services.show',$service->slug) }}">
-
-                                    {{ $service->title }}
-
-                                </a>
-
-                            </li>
-
-                        @endforeach
-
-                    </ul>
-
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('shop.*') ? 'active' : '' }}"
-                       href="{{ route('shop.index') }}">
-                        المنتجات
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('posts.*') ? 'active' : '' }}"
-                       href="{{ route('posts.index') }}">
-                        المقالات
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}"
-                       href="{{ route('contact') }}">
-                        تواصل معنا
-                    </a>
-                </li>
-
-            </ul>
-
-            <!-- Cart -->
-
-            <button class="btn cart-btn position-relative"
-                    data-bs-toggle="offcanvas"
-                    data-bs-target="#cartOffcanvas">
-
-                <i class="bi bi-cart3"></i>
-
-              <span id="cart-badge"
-      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger {{ $cartCount ? '' : 'd-none' }}">
-
-    {{ $cartCount }}
-
-</span>
-
-            </button>
-
-        </div>
-
-    </div>
-</nav>
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
-
-    <div class="offcanvas-header">
-
-        <h5 class="offcanvas-title">
-
-            <i class="bi bi-cart3 ms-2"></i>
-
-            سلة المشتريات
-
-        </h5>
-
-        <button class="btn-close"
-                data-bs-dismiss="offcanvas">
-        </button>
-
-    </div>
-
-  <div class="offcanvas-body">
-
-    <div id="cart-items">
-
-        @include('shop.partials.mini-cart')
-
-    </div>
-
-</div>
-
-    <div class="border-top p-3">
-
-        <div class="d-flex justify-content-between mb-3">
-
-            <strong>الإجمالي</strong>
-
-            <strong id="cart-total">
-{{ number_format($cartTotal,2) }} ج.م
-            </strong>
-
-        </div>
-
-        <a href="{{ route('checkout.index') }}"
-class="btn btn-primary w-100 rounded-pill py-2">
-            متابعة الدفع
-
-        </a>
-
-    </div>
-
-</div>
 <style>
-    .navbar{
-    background:#fff!important;
-    padding:12px 0;
-    box-shadow:0 5px 20px rgba(0,0,0,.06);
-}
-/* =========================
-   Cart Item
-========================= */
-
-.cart-item{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    padding:15px;
-    border-bottom:1px solid #eee;
-}
-
-.cart-item:last-child{
-    border-bottom:none;
-}
-
-.cart-item img{
-    width:80px;
-    height:80px;
-    min-width:80px;
-    object-fit:cover;
-    border-radius:12px;
-    border:1px solid #eee;
-    background:#fff;
-}
-
-.cart-item-info{
-    flex:1;
-}
-
-.cart-item-title{
-    font-size:15px;
-    font-weight:700;
-    margin-bottom:6px;
-    color:#222;
-    line-height:1.5;
-}
-
-.cart-price{
-    color:#0d6efd;
-    font-size:17px;
-    font-weight:700;
-    margin-bottom:4px;
-}
-.navbar-brand{
-    font-weight:800;
-}
-
-.navbar-nav{
-    gap:8px;
-}
-
-.nav-link{
-    color:#444!important;
-    font-weight:600;
-    padding:10px 18px!important;
-    border-radius:8px;
-    transition:.3s;
-}
-
-.nav-link:hover,
-.nav-link.active{
-    background:#0d6efd;
-    color:#fff!important;
-}
-
-.dropdown-menu{
-    border:none;
-    border-radius:15px;
-    padding:8px;
-    box-shadow:0 15px 40px rgba(0,0,0,.12);
-}
-
-.dropdown-item{
-    padding:10px 15px;
-    border-radius:8px;
-}
-
-.dropdown-item:hover{
-    background:#0d6efd;
-    color:#fff;
-}
-
-.cart-btn{
-    width:50px;
-    height:50px;
-    border:none;
-    border-radius:12px;
-    background:#0d6efd;
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:22px;
-}
-
-.cart-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(13,110,253,.35);
-}
-
-.offcanvas{
-    width:380px;
-}
-
-@media(max-width:991px){
-
-    .navbar-nav{
-
-        padding:20px 0;
-
-    }
-
-    .cart-btn{
-
-        margin-top:15px;
-        width:100%;
-
-    }
-
-}
-
+.shop-nav{direction:rtl;display:flex;align-items:center;gap:18px;background:#fff;padding:10px 22px;border-bottom:1px solid #eee;box-shadow:0 3px 18px rgba(0,0,0,.06);position:relative;z-index:1000;font-family:Tajawal,Arial}.shop-logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:#071a35;white-space:nowrap}.shop-logo>span{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#0d6efd,#00b4ff);display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;box-shadow:0 7px 18px rgba(13,110,253,.25)}.shop-logo div{display:flex;flex-direction:column;line-height:1}.shop-logo strong{font-size:20px;font-weight:900}.shop-logo small{font-size:11px;color:#0d6efd;font-weight:700;margin-top:5px}.shop-categories{position:relative}.categories-btn{border:1px solid #e7ebf2;background:#f8faff;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:7px;color:#071a35;cursor:pointer}.categories-btn:hover{background:#0d6efd;color:#fff}.shop-categories .dropdown-menu{right:0;left:auto;border:0;border-radius:14px;padding:8px;min-width:210px;box-shadow:0 15px 40px rgba(0,0,0,.12)}.shop-categories .dropdown-menu a{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;color:#26354d;text-decoration:none;font-size:14px}.shop-categories .dropdown-menu a:hover{background:#f0f6ff;color:#0d6efd}.shop-search{height:44px;display:flex;flex:1;max-width:390px;background:#f6f8fb;border:1px solid #e7ebf0;border-radius:12px;overflow:hidden}.shop-search input{width:100%;border:0;outline:0;background:transparent;padding:0 15px;font-size:14px;direction:rtl}.shop-search button{width:48px;border:0;background:#0d6efd;color:#fff;font-size:17px;cursor:pointer}.shop-links{display:flex;align-items:center;gap:5px;margin-right:auto}.shop-links a{position:relative;text-decoration:none;color:#536176;font-size:14px;font-weight:700;padding:11px 10px;white-space:nowrap;border-radius:9px}.shop-links a:hover,.shop-links a.active{color:#0d6efd;background:#f0f6ff}.shop-links a.active:after{content:"";position:absolute;bottom:-12px;right:15%;width:70%;height:3px;border-radius:5px;background:#0d6efd}.shop-actions{display:flex;gap:7px}.shop-actions a{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:18px}.shop-actions .whatsapp{background:#eafaf1;color:#18a957}.shop-actions .call{background:#edf4ff;color:#0d6efd}@media(max-width:1100px){.shop-links{display:none}.shop-search{max-width:none}}@media(max-width:700px){.shop-nav{padding:9px 12px;gap:8px;flex-wrap:wrap}.shop-logo strong{font-size:17px}.shop-logo small{font-size:9px}.shop-logo>span{width:38px;height:38px}.shop-categories b{display:none}.categories-btn{padding:9px 11px}.shop-search{order:5;flex-basis:100%;max-width:none}.shop-actions{margin-right:auto}}
 </style>
+
+<div class="shop-nav">
+
+    <a href="{{ route('home') }}" class="shop-logo">
+        <span><i class="bi bi-lightning-charge-fill"></i></span>
+        <div><strong>محرك</strong><small>الأرباح</small></div>
+    </a>
+
+    <div class="shop-categories dropdown">
+        <button class="categories-btn" data-bs-toggle="dropdown">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            <b>الأقسام</b>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+
+        <ul class="dropdown-menu">
+            <li>
+                <a href="{{ route('products.index') }}">
+                    <i class="bi bi-grid"></i> جميع المنتجات
+                </a>
+            </li>
+
+            @foreach($categories ?? [] as $category)
+                <li>
+                    <a href="{{ route('products.category',$category->slug) }}">
+                        <i class="bi bi-box"></i> {{ $category->name }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </div>
+
+    <form action="{{ route('products.index') }}" method="GET" class="shop-search">
+        <input type="search" name="search" value="{{ request('search') }}" placeholder="ابحث عن منتج...">
+        <button type="submit"><i class="bi bi-search"></i></button>
+    </form>
+
+    <div class="shop-links">
+
+        <a href="{{ route('home') }}"
+           class="{{ request()->routeIs('home') ? 'active' : '' }}">
+            الرئيسية
+        </a>
+
+        <a href="{{ route('products.index') }}"
+           class="{{ request()->routeIs('products.index') || request()->routeIs('products.show') || request()->routeIs('products.category') || request()->routeIs('products.subcategory') ? 'active' : '' }}">
+            المنتجات
+        </a>
+
+        <a href="{{ route('about') }}"
+           class="{{ request()->routeIs('about') ? 'active' : '' }}">
+            من نحن
+        </a>
+
+        <a href="{{ route('contact') }}"
+           class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+            تواصل معنا
+        </a>
+
+    </div>
+
+    <div class="shop-actions">
+        <a href="https://wa.me/2011128555985" target="_blank" class="whatsapp" title="واتساب">
+            <i class="bi bi-whatsapp"></i>
+        </a>
+
+        <a href="tel:011128555985" class="call" title="اتصال">
+            <i class="bi bi-telephone-fill"></i>
+        </a>
+    </div>
+
+</div>
+

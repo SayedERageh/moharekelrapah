@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProductController;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
@@ -27,56 +28,23 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('/من-نحن', 'pages.about')->name('about');
 Route::view('/تواصل-معنا', 'pages.contact')->name('contact');
 
-/*
-|--------------------------------------------------------------------------
-| Shop
-|--------------------------------------------------------------------------
-*/
 
-Route::get('/shop', [ShopController::class, 'index'])->name('shop.index');
+Route::prefix('products')->name('products.')->group(function () {
 
-Route::get('/shop/{id}', [ShopController::class, 'show'])->name('shop.show');
+    Route::get('/', [ProductController::class, 'index'])
+        ->name('index');
 
+    Route::get('/category/{slug}', [ProductController::class, 'category'])
+        ->name('category');
 
-Route::get('/mini-cart', [CartController::class, 'miniCart'])
-    ->name('cart.mini');
-    Route::get('/cart/data', [CartController::class, 'data'])
-    ->name('cart.data');
-/*
+    Route::get('/subcategory/{slug}', [ProductController::class, 'subcategory'])
+        ->name('subcategory');
 
-|---------------------------    -----------------------------------------------
-| Cart
-|--------------------------------------------------------------------------
-*/
-
-Route::prefix('cart')->name('cart.')->group(function () {
-
-    Route::get('/', [CartController::class, 'index'])->name('index');
-
-    Route::post('/add/{id}', [CartController::class, 'add'])->name('add');
-
-    Route::post('/increase/{id}', [CartController::class, 'increase'])->name('increase');
-
-    Route::post('/decrease/{id}', [CartController::class, 'decrease'])->name('decrease');
-
-    Route::delete('/remove/{id}', [CartController::class, 'remove'])->name('remove');
+    Route::get('/{slug}', [ProductController::class, 'show'])
+        ->name('show');
 
 });
 
-/*
-|--------------------------------------------------------------------------
-| Checkout
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/checkout', [CheckoutController::class, 'index'])
-    ->name('checkout.index');
-
-Route::post('/checkout', [CheckoutController::class, 'store'])
-    ->name('checkout.store');
-
-Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])
-    ->name('checkout.success');
 /*
 |--------------------------------------------------------------------------
 | Services
