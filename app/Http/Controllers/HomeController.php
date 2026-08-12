@@ -5,26 +5,48 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Service;
-use App\Models\Slider;
-use Illuminate\Routing\Controller;
+use App\Models\Store;
 
-class HomeController extends Controller
+class HomeController 
 {
     public function index()
     {
-        $services = Service::latest()->take(6)->get();
+        /*
+        |--------------------------------------------------------------------------
+        | الخدمات
+        |--------------------------------------------------------------------------
+        */
+
+        $services = Service::latest()
+            ->take(6)
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | الأقسام
+        |--------------------------------------------------------------------------
+        */
 
         $categories = ProductCategory::where('is_active', true)
             ->with([
                 'subcategories' => function ($query) {
-                    $query->where('is_active', true)
+                    $query
+                        ->where('is_active', true)
                         ->orderBy('sort_order');
                 }
             ])
             ->orderBy('sort_order')
             ->get();
 
-        $products = Product::where('is_active', true)
+
+        /*
+        |--------------------------------------------------------------------------
+        | المنتجات المميزة
+        |--------------------------------------------------------------------------
+        */
+
+        $featuredProducts = Product::where('is_active', true)
             ->where('is_featured', true)
             ->with([
                 'store',
@@ -35,10 +57,59 @@ class HomeController extends Controller
             ->take(8)
             ->get();
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | أحدث المنتجات
+        |--------------------------------------------------------------------------
+        */
+
+        $latestProducts = Product::where('is_active', true)
+            ->with([
+                'store',
+                'subcategory.productCategory'
+            ])
+            ->latest()
+            ->take(8)
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | أفضل العروض
+        |--------------------------------------------------------------------------
+        */
+
+        $offerProducts = Product::where('is_active', true)
+            ->whereNotNull('old_price')
+            ->whereColumn('old_price', '>', 'price')
+            ->with([
+                'store',
+                'subcategory.productCategory'
+            ])
+            ->orderByRaw('(old_price - price) / old_price DESC')
+            ->take(8)
+            ->get();
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | المتاجر
+        |--------------------------------------------------------------------------
+        */
+
+        $stores = Store::where('is_active', true)
+            ->orderBy('name')
+            ->get();
+
+
         return view('pages.home', compact(
             'services',
             'categories',
-            'products'
+            'featuredProducts',
+            'latestProducts',
+            'offerProducts',
+            'stores'
         ));
     }
 }

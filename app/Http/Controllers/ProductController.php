@@ -84,35 +84,47 @@ class ProductController
             );
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | الترتيب
-        |--------------------------------------------------------------------------
-        */
+    /*
+|--------------------------------------------------------------------------
+| الترتيب
+|--------------------------------------------------------------------------
+*/
 
-        $sort = $request->get('sort', 'price_asc');
+$sort = $request->get('sort', 'latest');
 
-        switch ($sort) {
+switch ($sort) {
 
-            case 'price_desc':
-                $query->orderBy('price', 'desc');
-                break;
+    case 'price_low':
 
-            case 'latest':
-                $query->latest();
-                break;
+        $query->orderBy('price', 'asc');
 
-            case 'featured':
-                $query
-                    ->orderByDesc('is_featured')
-                    ->orderBy('price');
-                break;
+        break;
 
-            default:
-                $query->orderBy('price', 'asc');
-                break;
-        }
 
+    case 'price_high':
+
+        $query->orderBy('price', 'desc');
+
+        break;
+
+
+    case 'featured':
+
+        $query
+            ->orderByDesc('is_featured')
+            ->orderBy('price', 'asc');
+
+        break;
+
+
+    case 'latest':
+
+    default:
+
+        $query->latest();
+
+        break;
+}
         /*
         |--------------------------------------------------------------------------
         | Pagination
@@ -171,31 +183,44 @@ class ProductController
     /**
      * منتجات الفرع
      */
-    public function subcategory($slug)
-    {
-        $subcategory = Subcategory::where('slug', $slug)
-            ->where('is_active', true)
-            ->with('productCategory')
-            ->firstOrFail();
+  /**
+ * منتجات الفرع
+ */
+public function subcategory($slug)
+{
+    // جلب الفرع
+    $subcategory = Subcategory::where('slug', $slug)
+        ->where('is_active', true)
+        ->with('productCategory')
+        ->firstOrFail();
 
-        $products = Product::where('is_active', true)
-            ->where(
-                'subcategory_id',
-                $subcategory->id
-            )
-            ->with([
-                'store',
-                'subcategory.productCategory'
-            ])
-            ->orderBy('price', 'asc')
-            ->paginate(12)
-            ->withQueryString();
+    // القسم الرئيسي التابع له الفرع
+    $category = $subcategory->productCategory;
 
-        return view('products.category', compact(
-            'subcategory',
-            'products'
-        ));
-    }
+    // جميع الفروع التابعة للقسم
+    $subcategories = $category->subcategories()
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
+
+    // منتجات هذا الفرع فقط
+    $products = Product::where('is_active', true)
+        ->where('subcategory_id', $subcategory->id)
+        ->with([
+            'store',
+            'subcategory.productCategory'
+        ])
+        ->orderBy('price', 'asc')
+        ->paginate(12)
+        ->withQueryString();
+
+    return view('products.category', compact(
+        'category',
+        'subcategory',
+        'subcategories',
+        'products'
+    ));
+}
 
 
     /**

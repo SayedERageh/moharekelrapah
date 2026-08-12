@@ -424,16 +424,46 @@
                             @endif
 
 
-                            {{-- Details --}}
-                            <a
-                                href="{{ route('products.show',$product->slug) }}"
-                                class="product-btn">
+                          @if($product->affiliate_url)
 
-                                <i class="bi bi-eye"></i>
-                                عرض التفاصيل
+    <a
+        href="{{ $product->affiliate_url }}"
+        target="_blank"
+        rel="nofollow sponsored noopener"
+        class="product-btn amazon-btn">
 
-                            </a>
+        <i class="bi bi-cart-check-fill"></i>
 
+        شراء من Amazon
+
+        <i class="bi bi-box-arrow-up-left"></i>
+
+    </a>
+
+    <div class="external-note">
+        <i class="bi bi-shield-check"></i>
+        سيتم تحويلك إلى Amazon لإتمام عملية الشراء
+    </div>
+
+@else
+
+    <a
+        href="{{ route('products.show',$product->slug) }}"
+        class="product-btn">
+
+        <i class="bi bi-eye"></i>
+        عرض التفاصيل
+
+        <i class="bi bi-arrow-left"></i>
+
+    </a>
+
+    <div class="external-note">
+        <i class="bi bi-info-circle"></i>
+        تفاصيل المنتج
+    </div>
+
+@endif
                             <div class="external-note">
                                 <i class="bi bi-box-arrow-up-left"></i>
                                 الشراء يتم من المتجر الخارجي

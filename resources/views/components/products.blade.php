@@ -1,241 +1,305 @@
-@if(isset($products) && $products->count())
-
-<section class="home-products-section py-5" dir="rtl">
+<section class="home-products-section" dir="rtl">
 
     <div class="container">
 
-        {{-- Section Header --}}
-        <div class="text-center mb-5">
+
+        {{-- =====================================================
+            HEADER
+        ====================================================== --}}
+
+        <div class="products-main-header text-center">
 
             <span class="products-badge">
                 <i class="bi bi-stars"></i>
-                منتجات مميزة
+                محرك الأرباح
             </span>
 
-            <h2 class="products-title">
-                أفضل المنتجات
+            <h2>
+                اكتشف أفضل المنتجات
+                <strong>والعروض</strong>
             </h2>
 
-            <p class="products-description">
-                اكتشف أفضل المنتجات المختارة من المتاجر المختلفة
+            <p>
+                مجموعة مختارة من المنتجات من المتاجر المختلفة،
+                قارن واكتشف أفضل العروض وانتقل مباشرة إلى المتجر.
             </p>
 
         </div>
 
 
-        {{-- Products Carousel --}}
-        <div id="homeProductsCarousel"
-             class="carousel slide"
-             data-bs-ride="carousel">
+        {{-- =====================================================
+            CATEGORIES
+        ====================================================== --}}
 
-            <div class="carousel-inner">
+        @if($categories->count())
 
-                @foreach($products->chunk(4) as $chunkIndex => $productChunk)
+            <div class="home-categories">
 
-                    <div class="carousel-item {{ $chunkIndex === 0 ? 'active' : '' }}">
+                <div class="categories-header">
 
-                        <div class="row g-4">
+                    <div>
+                        <span>تصفح بسهولة</span>
 
-                            @foreach($productChunk as $product)
+                        <h3>
+                            تسوق حسب القسم
+                        </h3>
+                    </div>
 
-                                <div class="col-lg-3 col-md-6">
+                    <a href="{{ route('products.index') }}">
+                        كل الأقسام
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
 
-                                    <div class="home-product-card">
+                </div>
 
-                                        {{-- Image --}}
-                                        <div class="home-product-image">
 
-                                            @if($product->first_image)
+                <div class="row g-3">
 
-                                                <img
-                                                    src="{{ asset('uploads/' . $product->first_image) }}"
-                                                    alt="{{ $product->name }}"
-                                                >
+                    @foreach($categories->take(8) as $category)
 
-                                            @else
+                        <div class="col-xl-3 col-lg-3 col-md-4 col-6">
 
-                                                <div class="product-no-image">
-                                                    <i class="bi bi-image"></i>
-                                                </div>
+                            <a
+                                href="{{ route('products.category', $category->slug) }}"
+                                class="home-category-card"
+                            >
 
-                                            @endif
+                                <div class="category-icon">
 
+                                    @if($category->image)
 
-                                            {{-- Featured --}}
-                                            @if($product->is_featured)
+                                        <img
+                                            src="{{ asset('uploads/' . $category->image) }}"
+                                            alt="{{ $category->name }}"
+                                            loading="lazy"
+                                        >
 
-                                                <span class="product-featured">
-                                                    <i class="bi bi-star-fill"></i>
-                                                    مميز
-                                                </span>
+                                    @else
 
-                                            @endif
+                                        <i class="bi bi-grid"></i>
 
-
-                                            {{-- Discount --}}
-                                            @if($product->discount_percentage)
-
-                                                <span class="product-discount">
-                                                    -{{ $product->discount_percentage }}%
-                                                </span>
-
-                                            @endif
-
-                                        </div>
-
-
-                                        {{-- Content --}}
-                                        <div class="home-product-content">
-
-                                            {{-- Category --}}
-                                            @if($product->subcategory)
-
-                                                <div class="product-category">
-                                                    {{ $product->subcategory->name }}
-                                                </div>
-
-                                            @endif
-
-
-                                            {{-- Product Name --}}
-                                            <h3 class="home-product-name">
-                                                {{ $product->name }}
-                                            </h3>
-
-
-                                            {{-- Store --}}
-                                            @if($product->store)
-
-                                                <div class="product-store">
-
-                                                    <i class="bi bi-shop"></i>
-
-                                                    {{ $product->store->name }}
-
-                                                </div>
-
-                                            @endif
-
-
-                                            {{-- Price --}}
-                                            <div class="product-price-box">
-
-                                                <div class="product-price">
-
-                                                    {{ number_format($product->price, 2) }}
-
-                                                    <span>
-                                                        جنيه
-                                                    </span>
-
-                                                </div>
-
-
-                                                @if($product->old_price)
-
-                                                    <div class="product-old-price">
-
-                                                        {{ number_format($product->old_price, 2) }}
-
-                                                        جنيه
-
-                                                    </div>
-
-                                                @endif
-
-                                            </div>
-
-
-                                            {{-- Buy Button --}}
-                                            @if($product->affiliate_url && $product->store)
-
-                                                <a
-                                                    href="{{ $product->affiliate_url }}"
-                                                    target="_blank"
-                                                    rel="nofollow sponsored noopener"
-                                                    class="home-product-btn"
-                                                >
-
-                                                    <i class="bi bi-cart-check"></i>
-
-                                                    شراء من {{ $product->store->name }}
-
-                                                    <i class="bi bi-arrow-left"></i>
-
-                                                </a>
-
-                                            @else
-
-                                                <a
-                                                    href="{{ route('products.show', $product->slug) }}"
-                                                    class="home-product-btn"
-                                                >
-
-                                                    <i class="bi bi-eye"></i>
-
-                                                    عرض المنتج
-
-                                                    <i class="bi bi-arrow-left"></i>
-
-                                                </a>
-
-                                            @endif
-
-                                        </div>
-
-                                    </div>
+                                    @endif
 
                                 </div>
 
-                            @endforeach
+
+                                <div class="category-content">
+
+                                    <h4>
+                                        {{ $category->name }}
+                                    </h4>
+
+                                    <span>
+                                        {{ $category->subcategories->count() }}
+                                        أقسام فرعية
+                                    </span>
+
+                                </div>
+
+
+                                <i class="bi bi-arrow-left category-arrow"></i>
+
+                            </a>
 
                         </div>
 
-                    </div>
+                    @endforeach
 
-                @endforeach
+                </div>
 
             </div>
 
-
-            {{-- Previous --}}
-            @if($products->count() > 4)
-
-                <button
-                    class="carousel-control-prev home-carousel-control"
-                    type="button"
-                    data-bs-target="#homeProductsCarousel"
-                    data-bs-slide="prev"
-                >
-
-                    <span class="carousel-control-icon">
-                        <i class="bi bi-chevron-right"></i>
-                    </span>
-
-                </button>
+        @endif
 
 
-                {{-- Next --}}
-                <button
-                    class="carousel-control-next home-carousel-control"
-                    type="button"
-                    data-bs-target="#homeProductsCarousel"
-                    data-bs-slide="next"
-                >
 
-                    <span class="carousel-control-icon">
-                        <i class="bi bi-chevron-left"></i>
-                    </span>
+        {{-- =====================================================
+            FEATURED PRODUCTS
+        ====================================================== --}}
 
-                </button>
+        @if($featuredProducts->count())
 
-            @endif
+            <div class="products-block">
 
-        </div>
+                <div class="products-block-header">
+
+                    <div>
+
+                        <span class="block-label featured-label">
+                            <i class="bi bi-stars"></i>
+                            مختاراتنا
+                        </span>
+
+                        <h3>
+                            منتجات مميزة
+                        </h3>
+
+                        <p>
+                            منتجات اخترناها لك بعناية
+                        </p>
+
+                    </div>
 
 
-        {{-- All Products --}}
-        <div class="text-center mt-5">
+                    <a href="{{ route('products.index', ['featured' => 1]) }}">
+                        عرض الكل
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    @foreach($featuredProducts as $product)
+
+                        @include(
+                            'components.product-card',
+                            ['product' => $product]
+                        )
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        @endif
+
+
+
+        {{-- =====================================================
+            OFFERS
+        ====================================================== --}}
+
+        @if($offerProducts->count())
+
+            <div class="offers-section">
+
+                <div class="offers-header">
+
+                    <div>
+
+                        <span>
+                            <i class="bi bi-fire"></i>
+                            عروض تستحق المشاهدة
+                        </span>
+
+                        <h3>
+                            أفضل الخصومات
+                        </h3>
+
+                        <p>
+                            وفر أكثر مع أفضل الأسعار المتاحة
+                        </p>
+
+                    </div>
+
+
+                    <a href="{{ route('products.index', ['sort' => 'price_low']) }}">
+                        اكتشف المزيد
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    @foreach($offerProducts as $product)
+
+                        @include(
+                            'components.product-card',
+                            ['product' => $product]
+                        )
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        @endif
+
+
+
+        {{-- =====================================================
+            LATEST PRODUCTS
+        ====================================================== --}}
+
+        @if($latestProducts->count())
+
+            <div class="products-block">
+
+                <div class="products-block-header">
+
+                    <div>
+
+                        <span class="block-label latest-label">
+                            <i class="bi bi-clock-history"></i>
+                            وصل حديثًا
+                        </span>
+
+                        <h3>
+                            أحدث المنتجات
+                        </h3>
+
+                        <p>
+                            آخر المنتجات المضافة إلى محرك الأرباح
+                        </p>
+
+                    </div>
+
+
+                    <a href="{{ route('products.index') }}">
+                        جميع المنتجات
+                        <i class="bi bi-arrow-left"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="row g-4">
+
+                    @foreach($latestProducts as $product)
+
+                        @include(
+                            'components.product-card',
+                            ['product' => $product]
+                        )
+
+                    @endforeach
+
+                </div>
+
+            </div>
+
+        @endif
+
+
+
+        {{-- =====================================================
+            ALL PRODUCTS BUTTON
+        ====================================================== --}}
+
+        <div class="all-products-area">
+
+            <div>
+
+                <span>
+                    اكتشف المزيد
+                </span>
+
+                <h3>
+                    لم تجد ما تبحث عنه؟
+                </h3>
+
+                <p>
+                    تصفح جميع المنتجات واستخدم الفلاتر للوصول إلى المنتج المناسب.
+                </p>
+
+            </div>
+
 
             <a
                 href="{{ route('products.index') }}"
@@ -255,357 +319,518 @@
 </section>
 
 
+
 <style>
 
-.home-products-section {
-    background: linear-gradient(
-        180deg,
-        #f8fbff 0%,
-        #ffffff 100%
-    );
+/* =========================================================
+   MAIN
+========================================================= */
 
-    position: relative;
-    overflow: hidden;
+.home-products-section{
+    direction:rtl;
+    background:
+        linear-gradient(
+            180deg,
+            #f7faff 0%,
+            #ffffff 100%
+        );
+    padding:90px 0;
+    overflow:hidden;
 }
 
-.products-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
 
-    background: rgba(13, 110, 253, .08);
+/* =========================================================
+   HEADER
+========================================================= */
 
-    color: #0d6efd;
-
-    padding: 8px 18px;
-
-    border-radius: 50px;
-
-    font-size: 14px;
-
-    font-weight: 700;
-
-    margin-bottom: 15px;
+.products-main-header{
+    margin-bottom:65px;
 }
 
-.products-title {
-    font-size: 38px;
-    font-weight: 800;
-    color: #071a35;
-    margin-bottom: 12px;
+.products-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:8px 17px;
+
+    border-radius:50px;
+
+    background:#eff6ff;
+    color:#2563eb;
+
+    font-size:12px;
+    font-weight:800;
+
+    margin-bottom:16px;
 }
 
-.products-description {
-    color: #6b7280;
-    font-size: 16px;
+.products-main-header h2{
+    color:#071a35;
+    font-size:clamp(30px,4vw,48px);
+    font-weight:900;
+    margin:0 0 15px;
 }
 
-.home-product-card {
-    background: #fff;
-    border-radius: 22px;
-    overflow: hidden;
-    border: 1px solid #edf1f7;
-    height: 100%;
+.products-main-header h2 strong{
+    color:#2563eb;
+}
 
-    transition: .35s ease;
+.products-main-header p{
+    max-width:650px;
+    margin:auto;
+
+    color:#64748b;
+
+    font-size:15px;
+    line-height:2;
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+.home-categories{
+    margin-bottom:75px;
+}
+
+.categories-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+
+    margin-bottom:25px;
+}
+
+.categories-header span{
+    color:#2563eb;
+    font-size:11px;
+    font-weight:800;
+}
+
+.categories-header h3{
+    margin:4px 0 0;
+
+    color:#0f172a;
+
+    font-size:25px;
+    font-weight:900;
+}
+
+.categories-header a{
+    display:flex;
+    align-items:center;
+    gap:7px;
+
+    color:#2563eb;
+
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:800;
+}
+
+
+/* CATEGORY CARD */
+
+.home-category-card{
+    height:100%;
+
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+    position:relative;
+
+    padding:18px;
+
+    background:#fff;
+
+    border:1px solid #e7edf5;
+
+    border-radius:18px;
+
+    text-decoration:none!important;
+
+    transition:.3s ease;
+
+    box-shadow:0 7px 25px rgba(15,23,42,.035);
+}
+
+.home-category-card:hover{
+    transform:translateY(-5px);
+
+    border-color:#bfdbfe;
 
     box-shadow:
-        0 10px 35px rgba(0, 0, 0, .05);
+        0 15px 35px rgba(37,99,235,.10);
 }
 
-.home-product-card:hover {
-    transform: translateY(-8px);
+.category-icon{
+    width:55px;
+    height:55px;
 
-    box-shadow:
-        0 20px 45px rgba(0, 0, 0, .11);
+    flex:0 0 55px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:15px;
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+    font-size:24px;
+
+    overflow:hidden;
 }
 
-.home-product-image {
-    height: 250px;
-    background: #f7f9fc;
+.category-icon img{
+    width:100%;
+    height:100%;
 
-    position: relative;
+    object-fit:contain;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
+    padding:7px;
 }
 
-.home-product-image img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: contain;
-
-    padding: 18px;
-
-    transition: .4s ease;
+.category-content{
+    min-width:0;
 }
 
-.home-product-card:hover
-.home-product-image img {
-    transform: scale(1.06);
+.category-content h4{
+    color:#0f172a;
+
+    font-size:14px;
+    font-weight:900;
+
+    margin:0 0 5px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-.product-no-image {
-    font-size: 55px;
-    color: #cbd5e1;
+.category-content span{
+    color:#94a3b8;
+
+    font-size:10px;
 }
 
-.product-featured {
-    position: absolute;
+.category-arrow{
+    margin-right:auto;
 
-    top: 15px;
-    right: 15px;
+    color:#cbd5e1;
 
-    background: #071a35;
-    color: #fff;
-
-    padding: 7px 12px;
-
-    border-radius: 50px;
-
-    font-size: 12px;
-    font-weight: 700;
+    transition:.3s;
 }
 
-.product-featured i {
-    color: #ffc107;
-    margin-left: 4px;
+.home-category-card:hover .category-arrow{
+    color:#2563eb;
+    transform:translateX(-4px);
 }
 
-.product-discount {
-    position: absolute;
 
-    top: 15px;
-    left: 15px;
+/* =========================================================
+   PRODUCTS BLOCK
+========================================================= */
 
-    background: #dc3545;
-    color: #fff;
-
-    padding: 7px 11px;
-
-    border-radius: 50px;
-
-    font-size: 12px;
-    font-weight: 700;
+.products-block{
+    margin-bottom:80px;
 }
 
-.home-product-content {
-    padding: 20px;
+.products-block-header{
+    display:flex;
+
+    align-items:end;
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-bottom:28px;
 }
 
-.product-category {
-    color: #0d6efd;
+.products-block-header h3{
+    color:#0f172a;
 
-    font-size: 12px;
-    font-weight: 700;
+    font-size:28px;
+    font-weight:900;
 
-    margin-bottom: 8px;
+    margin:5px 0;
 }
 
-.home-product-name {
-    font-size: 18px;
+.products-block-header p{
+    color:#64748b;
 
-    font-weight: 800;
+    font-size:13px;
 
-    color: #071a35;
-
-    line-height: 1.5;
-
-    min-height: 54px;
-
-    margin-bottom: 10px;
+    margin:0;
 }
 
-.product-store {
-    color: #6b7280;
+.products-block-header > a{
+    display:flex;
+    align-items:center;
+    gap:7px;
 
-    font-size: 13px;
+    color:#2563eb;
 
-    margin-bottom: 15px;
+    text-decoration:none;
+
+    font-size:12px;
+    font-weight:800;
+
+    white-space:nowrap;
 }
 
-.product-store i {
-    color: #0d6efd;
+.block-label{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
 
-    margin-left: 5px;
+    font-size:10px;
+    font-weight:800;
 }
 
-.product-price-box {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-bottom: 18px;
+.featured-label{
+    color:#2563eb;
 }
 
-.product-price {
-    font-size: 21px;
-
-    font-weight: 900;
-
-    color: #0d6efd;
+.latest-label{
+    color:#059669;
 }
 
-.product-price span {
-    font-size: 12px;
 
-    font-weight: 600;
-}
+/* =========================================================
+   OFFERS
+========================================================= */
 
-.product-old-price {
-    font-size: 13px;
+.offers-section{
+    position:relative;
 
-    color: #9ca3af;
+    padding:35px;
 
-    text-decoration: line-through;
-}
+    margin-bottom:80px;
 
-.home-product-btn {
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 8px;
+    border-radius:28px;
 
     background:
         linear-gradient(
             135deg,
-            #0d6efd,
-            #084298
+            #071a35,
+            #0b3d68
         );
 
-    color: #fff;
-
-    padding: 13px 15px;
-
-    border-radius: 13px;
-
-    text-decoration: none;
-
-    font-size: 14px;
-
-    font-weight: 800;
-
-    transition: .3s ease;
+    overflow:hidden;
 }
 
-.home-product-btn:hover {
-    color: #fff;
+.offers-section::before{
+    content:"";
 
-    transform: translateY(-2px);
+    position:absolute;
+
+    width:300px;
+    height:300px;
+
+    border-radius:50%;
+
+    background:#2563eb20;
+
+    left:-100px;
+    top:-150px;
+}
+
+.offers-section::after{
+    content:"";
+
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    border-radius:50%;
+
+    background:#0ea5e920;
+
+    right:-100px;
+    bottom:-150px;
+}
+
+.offers-header{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+
+    margin-bottom:30px;
+}
+
+.offers-header span{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    color:#fbbf24;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+.offers-header h3{
+    color:#fff;
+
+    font-size:28px;
+    font-weight:900;
+
+    margin:5px 0;
+}
+
+.offers-header p{
+    color:#cbd5e1;
+
+    font-size:13px;
+
+    margin:0;
+}
+
+.offers-header > a{
+    color:#fff;
+
+    text-decoration:none;
+
+    display:flex;
+    align-items:center;
+
+    gap:7px;
+
+    font-size:12px;
+    font-weight:800;
+}
+
+
+/* =========================================================
+   ALL PRODUCTS
+========================================================= */
+
+.all-products-area{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:30px;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    background:#fff;
+
+    border:1px solid #e5eaf1;
+
+    box-shadow:0 10px 35px rgba(15,23,42,.05);
+}
+
+.all-products-area span{
+    color:#2563eb;
+
+    font-size:11px;
+    font-weight:800;
+}
+
+.all-products-area h3{
+    color:#0f172a;
+
+    font-size:24px;
+    font-weight:900;
+
+    margin:5px 0;
+}
+
+.all-products-area p{
+    color:#64748b;
+
+    font-size:13px;
+
+    margin:0;
+}
+
+.all-products-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:10px;
+
+    flex-shrink:0;
+
+    padding:14px 25px;
+
+    border-radius:13px;
+
+    background:#2563eb;
+
+    color:#fff!important;
+
+    text-decoration:none!important;
+
+    font-size:13px;
+    font-weight:800;
+
+    transition:.3s;
+}
+
+.all-products-btn:hover{
+    background:#1d4ed8;
+
+    transform:translateY(-3px);
 
     box-shadow:
-        0 8px 20px rgba(13, 110, 253, .25);
+        0 10px 25px rgba(37,99,235,.25);
 }
 
-.home-carousel-control {
-    width: 50px;
-    height: 50px;
 
-    top: 50%;
+/* =========================================================
+   MOBILE
+========================================================= */
 
-    transform: translateY(-50%);
+@media(max-width:767px){
 
-    opacity: 1;
-}
-
-.carousel-control-prev {
-    right: -25px;
-    left: auto;
-}
-
-.carousel-control-next {
-    left: -25px;
-    right: auto;
-}
-
-.carousel-control-icon {
-    width: 48px;
-    height: 48px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    background: #fff;
-
-    color: #071a35;
-
-    border-radius: 50%;
-
-    box-shadow:
-        0 8px 25px rgba(0,0,0,.12);
-
-    font-size: 18px;
-}
-
-.all-products-btn {
-    display: inline-flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    color: #071a35;
-
-    border: 2px solid #071a35;
-
-    padding: 12px 25px;
-
-    border-radius: 50px;
-
-    text-decoration: none;
-
-    font-weight: 800;
-
-    transition: .3s ease;
-}
-
-.all-products-btn:hover {
-    background: #071a35;
-    color: #fff;
-}
-
-@media (max-width: 991px) {
-
-    .products-title {
-        font-size: 31px;
+    .home-products-section{
+        padding:60px 0;
     }
 
-    .home-product-image {
-        height: 220px;
+    .categories-header,
+    .products-block-header,
+    .offers-header,
+    .all-products-area{
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-}
-
-@media (max-width: 767px) {
-
-    .products-title {
-        font-size: 27px;
+    .products-block-header h3,
+    .offers-header h3{
+        font-size:23px;
     }
 
-    .home-carousel-control {
-        display: none;
+    .offers-section{
+        padding:25px 18px;
+        border-radius:22px;
     }
 
-    .home-product-card {
-        max-width: 420px;
-        margin: auto;
+    .all-products-area{
+        padding:25px 20px;
+    }
+
+    .all-products-btn{
+        width:100%;
     }
 
 }
 
 </style>
-
-@endif

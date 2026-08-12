@@ -1,30 +1,48 @@
 @extends('layouts.app')
 
-@section('title', 'الصفحة الرئيسية')
+@section('title', 'محرك الأرباح | أفضل المنتجات والعروض')
 
 @section('content')
 
-  <main class="main">
-@include('components.carouselHero')
-   @include('components.Featured')
-   @include('components.products')
+<main class="main">
+
+    {{-- Hero --}}
+    @include('components.carouselHero')
 
 
-@include('components.features')
-@include('components.call')
-@include('components.onfocus')
-@include('components.services')
+    {{-- الأقسام + المنتجات --}}
+    @include('components.products')
 
-<!-- Testimonials Section -->
-@include('components.testimonials')
-<!-- /Testimonials Section -->
-<!-- FAQ Section -->
-@include('components.faq')
 
-        <!-- Clients Section -->
-@include('components.clients')
-    
+    {{-- الخدمات --}}
+    @include('components.Featured')
 
-  </main>
+
+    {{-- مميزات الموقع --}}
+    @include('components.features')
+
+
+    {{-- Call To Action --}}
+    @include('components.call')
+
+
+    {{-- الخدمات الإضافية --}}
+    @include('components.onfocus')
+
+    @include('components.services')
+
+
+    {{-- آراء العملاء --}}
+    @include('components.testimonials')
+
+
+    {{-- الأسئلة الشائعة --}}
+    @include('components.faq')
+
+
+    {{-- المتاجر / العملاء --}}
+    @include('components.clients')
+
+</main>
 
 @endsection

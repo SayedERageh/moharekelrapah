@@ -28,7 +28,7 @@
                     <div class="footer-contact">
                         <div>
                             <i class="bi bi-telephone-fill"></i>
-                            <span>011128555985</span>
+                            <span>01128555985</span>
                         </div>
 
                         <div>
@@ -108,12 +108,12 @@
 
                         <div class="footer-buttons">
 
-                            <a href="tel:011128555985" class="footer-call">
+                            <a href="tel:01128555985" class="footer-call">
                                 <i class="bi bi-telephone-fill"></i>
                                 اتصل الآن
                             </a>
 
-                            <a href="https://wa.me/2011128555985"
+                            <a href="https://wa.me/201128555985"
                                target="_blank"
                                class="footer-whatsapp">
                                 <i class="bi bi-whatsapp"></i>
@@ -143,11 +143,11 @@
 
             <div class="footer-social">
 
-                <a href="tel:011128555985" aria-label="اتصال">
+                <a href="tel:01128555985" aria-label="اتصال">
                     <i class="bi bi-telephone-fill"></i>
                 </a>
 
-                <a href="https://wa.me/2011128555985"
+                <a href="https://wa.me/201128555985"
                    target="_blank"
                    aria-label="واتساب">
                     <i class="bi bi-whatsapp"></i>

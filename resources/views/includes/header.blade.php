@@ -64,11 +64,11 @@
     </div>
 
     <div class="shop-actions">
-        <a href="https://wa.me/2011128555985" target="_blank" class="whatsapp" title="واتساب">
+        <a href="https://wa.me/201128555985" target="_blank" class="whatsapp" title="واتساب">
             <i class="bi bi-whatsapp"></i>
         </a>
 
-        <a href="tel:011128555985" class="call" title="اتصال">
+        <a href="tel:01128555985" class="call" title="اتصال">
             <i class="bi bi-telephone-fill"></i>
         </a>
     </div>

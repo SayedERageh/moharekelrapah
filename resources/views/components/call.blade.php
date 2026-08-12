@@ -19,7 +19,7 @@
                 تجمع بين الجودة والسعر المناسب وتجربة التسوق السهلة.
             </p>
 
-            <a href="https://wa.me/2011128555985"
+            <a href="https://wa.me/201128555985"
                target="_blank"
                class="about-whatsapp">
                 <i class="bi bi-whatsapp"></i>
