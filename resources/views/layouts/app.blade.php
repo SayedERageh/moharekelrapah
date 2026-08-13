@@ -33,12 +33,12 @@
 <div class="floating-buttons">
 
   <!-- WhatsApp -->
-  <a href="https://wa.me/201044946388" target="_blank" class="float-btn whatsapp">
+  <a href="https://wa.me/201128555985" target="_blank" class="float-btn whatsapp">
     <i class="bi bi-whatsapp"></i>
   </a>
 
   <!-- Call -->
-  <a href="tel:01044946388" class="float-btn call">
+  <a href="tel:201128555985" class="float-btn call">
     <i class="bi bi-telephone-fill"></i>
   </a>
 
